@@ -1,0 +1,65 @@
+FAQ:
+
+1) WHY
+
+  Because many of the other solutions didn't do what we wanted, or 
+anything even approximating what we needed.  Transient events are 
+hard to catch, and if you are lucky they are logged.  If you aren't
+lucky, you have a hung machine with very little data.  Triggers are 
+a very important aspect of this, and we plan to implement them very
+shortly.
+
+If you have several tens of machines, or tens of thousands of 
+machines with differing OSes, it would be awful nice if you had a 
+way to do more than run a client on the machine in question, especially 
+if that client crashed with the OS ...  
+
+Think top of rack monitoring for cloud scale deployments (among other
+things) where you have to decide whether or not a node needed service,
+or a swift kick in the power cord.
+
+
+2) WHY NOT USE X (X being some package that does some part of the above)
+
+  Good question.  See above answer as to why.  If X depends upon other 
+subsystems being up, you have a problem when something below that
+crashes and takes out your logging and alerting solution.
+
+  Things like Zabbix et al are great tools, until something crashes and
+the agent becomes unresponsive.  They can tell you that it became
+unresponsive.  We should be able to tell you why.
+
+
+3) GEE ... IS THIS GENERAL ENOUGH YOU CAN USE IT FOR THINGS OTHER 
+THAN LINUX?
+
+ Why ... yes, yes you can.  We will be using this with SmartOS as well
+as Linux.  And if we (or someone) can help us understand how to do this 
+with (insert your favorite OS here), you can bet we will ask them to write
+up how to do this, or allow us to, in order to share.
+
+
+4) WHY IN ALL THAT IS HOLY DID YOU WRITE THIS IN PERL???!?!?!?! DONT 
+YOU KNOW LANGUAGE Q IS INFINITELY BETTER???  ISNT PERL LINE NOISE???
+
+  Um ... yeah.  Ok.  <bitbucket /> .
+
+
+5) WE NEED FEATURE Z, PLEASE WRITE IT AND SUPPORT IT FOR US
+
+  Sure thing, contact our info@scalableinformatics.com and ask for a 
+quote
+
+   NO, FOR FREE
+
+  Um ... yeah ... righto ... sure thing.  <bitbucket />
+
+
+6) WE NEED FEATURE Z, WE WILL WRITE IT AND SUPPORT IT  
+
+  Cool!  Let me know once it is done and we will review it.
+
+
+7) THERE IS NO 7
+
+

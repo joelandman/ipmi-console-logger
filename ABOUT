@@ -1,0 +1,59 @@
+ABOUT:
+
+  ICL stands for IPMI Console Logger .  Its primary purpose in life is
+to provide a combination of a logging agent with a configurable set of
+triggers for pattern detection within logs for IPMI connected machines.
+
+Here’s the problem I am trying to solve, call it a many year itch I’ve 
+been wanting to scratch. We build very high performance storage clusters, 
+extreme performance flash and ssd arrays, and a number of other things. 
+At customer sites, while in use, a unit could crash. When it does, we 
+really need a full console log to see the full crash log.
+
+Unfortunately, the “write to the screen” method gets very … very old 
+when you are trying to transcribe something … thats happened to scroll 
+off the screen.
+
+And that mechanism doesn’t scale. Doesn’t enable automation.
+
+“But wait” you say. “What about the remote syslog facilities built into 
+syslog and rsyslog?”
+
+They work fine as long as
+
+	* The machine is booted to an OS, and
+	* The network is up and operational on the machine, and
+	* The crash in question doesn’t take down, oh, say 
+
+		… THE NETWORK …
+
+And more to the point, what if we could basically stream this stuff to 
+local logs, and, I dunno, trigger actions on patterns appearing in the 
+logs?
+
+Assume I’ve got everything but the pattern matching up and going. And 
+that isn’t that hard to add. Assume we can log many … many machines 
+to a single centralized machine, as long as console output is redirected 
+over the serial port, and that the serial port is available over the 
+LAN in IPMI.
+
+This isn’t always the case, and some motherboard vendors like breaking 
+useful stuff (not naming names (*&*&%$^$& , but you know who you are) 
+like this. And assume grub sometimes fails completely to start with 
+some serial console specs on that same vendors motherboards … GRRRRRRRR ….
+
+Apart from these annoyances, this enables us to create not simply a 
+virtual serial concentrator, but a very intelligent one that can trigger 
+alerts, send messages, etc. Even if the machine is non-functional for 
+syslog/rsyslog network logging.
+
+   
+LICENSE:  GPL v2.0 only (c.f. http://www.gnu.org/licenses/gpl-2.0.html 
+for a copy if this fail is missing from the distribution.
+
+COPYRIGHT: 2012 Scalable Informatics Inc.
+
+SUPPORT:  paid support and features available from Scalable Informatics 
+	  Inc.  Contact info@scalableinformatics.com for details
+
+

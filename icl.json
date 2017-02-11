@@ -1,0 +1,15 @@
+# config-file-type: JSON 1
+{
+   "global" : {
+      "log_to_file" : "1",
+      "log_name" : "/tmp/$system.log"
+    },
+
+   "systems" : {      
+      "calculon" : {
+  	  "ipmi_addr" : "calculon-ipmi",
+          "ipmi_user" : "ADMIN",
+          "ipmi_pass" : "ADMIN",
+       },
+   } 
+}

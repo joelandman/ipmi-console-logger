@@ -1,0 +1,96 @@
+
+USAGE:
+
+to use ICL:
+
+1) Determine which terminal is mapped to SOL (serial over LAN).  You
+do this by setting up gettys on the various possible ports and running
+a SOL ipmi connection to see which port responds.  To do this, on 
+a remote machine, using ipmitool, do this
+
+	ipmitool -I lanplus -U $USER -P $PASS -H $HOST sol activate
+
+where $USER is the username for IPMI administrator level login.  $PASS
+is the password associated with that $USER.  $HOST is the IP address
+of the IPMI port (you can get that from 'ipmitool -I open lan print 1'
+on the target machine, after starting up the IPMI driver).
+
+Once this is up, start lighting up gettys to see if you get a login 
+prompt like this:
+
+	/sbin/agetty /dev/$PORT 115200 vt100
+
+for $PORT = ttyS0, ttyS1, ttyS2, ttyS3 ...  Usually it is ttyS1 or ttyS2 
+has been our experience, but you want to make sure it is correct.  You
+may need to add these ports to /etc/securetty, and test a login, then 
+run 'w' to verify that port is in use.  
+
+Note, while this doesn't seem to scale well, you usually have to do this 
+once per motherboard version in order to determine the SOL serial port,
+the rest are likely set up this way by default.  
+
+Note:  please verify your selection.  Double, triple check it.  Because if 
+you mess this up, with some versions of grub, boot will go slowly, while 
+with others, most notably those included in RHEL/CentOS 6.x ...
+
+  YOU WILL COMPLETELY DISABLE GRUB FROM LOADING IF YOU GET THE PORT WRONG
+
+which sorta ruins your day if you've just pushed this to 1k+ machines. 
+
+So get this right.  Seriously.  Take the time to double/triple check.
+
+Lets call the correct numeric value of the port (the digit in ttyS#) 
+$PORT for the below, and the device $SERIAL being defined as 
+ttyS${PORT}.  So if $PORT == 1, then $SERIAL == ttyS1 .
+
+
+2) make sure you have console logging turned on in your boot loader.  
+
+See the warning above for grub in RHEL/CentOS 6.x .  Learn from our
+fail.  Avoid replicating it.
+
+Assume you have numeric values for $SPEED (115200 is normal), and 
+assume $PARITY="n" and $BITS=8
+bits.  
+
+For grub in RHEL/CentOS 5.x add these two lines before the sections 
+with "title" in them
+
+  serial --unit=$PORT --speed=$SPEED --word=$BITS --parity=$PARITY --stop=1
+  terminal --timeout=10 console serial
+
+Then in each title section, add this to the kernel line:
+
+	console=$SERIAL,$SPEED$PARITY$BITS console=tty0
+
+so using the values in the example we used above
+
+	console=ttyS1,115200n8 console=tty0
+
+
+For grub in RHEL/CentOS 6.x BE VERY CAREFUL ABOUT THESE LINES added 
+before the sections with "title" in them.  We have seen this crash/hang
+grub with only a blinking cursor.
+
+  serial --unit=$PORT --speed=$SPEED --word=$BITS --parity=$PARITY --stop=1
+  terminal --timeout=10 console serial
+
+The "fix" is, in some Supermicro motherboard cases (uniprocessors), to omit 
+these lines, and just use the kernel lines above.  
+
+
+3) run icl on a host that can ping that IPMI port
+
+  This is the single host version.  A newer version uses a JSON config file
+to indicate hosts, or a URL to pull the host config file from).
+
+	mkdir /tmp/logs
+	icl.pl --host $HOST --user $USER --pass $PASS \
+		--output $HOST.output 
+
+You can use the --verbose and --debug if you wish to see more information.
+
+The JSON config file for machines will be documented shortly with examples.
+
+The JSON config file for triggers will be documented shortly with examples.
+
